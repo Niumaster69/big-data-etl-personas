@@ -1,0 +1,1695 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/29/2026 9:15:15 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SIX"
+  DTS:CreatorName="SIX\duvan"
+  DTS:Description="Punto 1: copia al staging stg.CursorPersonas los registros con SourceRowId 1 a 100, sin transformar"
+  DTS:DTSID="{54F73157-DBBF-4858-802A-82ADEEAE7EAC}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="9226"
+  DTS:ObjectName="P0_Staging_Cursor"
+  DTS:ProtectionLevel="0"
+  DTS:VersionGUID="{325D9984-508C-443A-B679-F2F15A085EA8}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel_PersonasETL]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{0D0FE464-9EFA-4534-A32E-EBACC99394E0}"
+      DTS:ObjectName="Excel_PersonasETL">
+      <DTS:PropertyExpression
+        DTS:Name="ExcelFilePath">@[User::RutaExcel]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="0"
+          DTS:ConnectRetryInterval="0"
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\ETL_Actividad4\PersonasETLActividad4.xlsx;Extended Properties=&quot;EXCEL 12.0 XML;HDR=YES;IMEX=1&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[OLEDB_PersonasETL]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{10A59905-A248-4EBE-B61D-B8A2A8D9A361}"
+      DTS:ObjectName="OLEDB_PersonasETL">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=PersonasETL;Provider=MSOLEDBSQL19.1;Integrated Security=SSPI;Use Encryption for Data=Optional;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{AF6B8892-1475-47DB-BCC2-DF51DBFF4F4D}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilasLeidas">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{E0F24373-AF0E-4D19-8037-058493C3EB4C}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="FilasStaging">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:Description="Ruta del Excel original (no se modifica)"
+      DTS:DTSID="{04611FBA-15D6-4E6E-9E30-FB1CEF32D309}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="RutaExcel">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\ETL_Actividad4\PersonasETLActividad4.xlsx</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\DFT Excel a staging del cursor"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DTSID="{FF285389-D08C-4382-ADA7-6296BBB82281}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DFT Excel a staging del cursor"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\DFT Excel a staging del cursor\CNT Filas al staging"
+              componentClassID="Microsoft.RowCount"
+              contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Counts rows as they pass through a data flow. For example, use the number of rows processed to determine whether or not to perform cleanup operations, or update text in an e-mail message to communicate processing status."
+              name="CNT Filas al staging">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable to hold the row count."
+                  name="VariableName">User::FilasStaging</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT Excel a staging del cursor\CNT Filas al staging.Inputs[Row Count Input 1]"
+                  hasSideEffects="true"
+                  name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\CNT Filas al staging.Outputs[Row Count Output 1]"
+                  name="Row Count Output 1"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\CNT Filas al staging.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT Excel a staging del cursor\CNT Filas leidas"
+              componentClassID="Microsoft.RowCount"
+              contactInfo="Row Count;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Counts rows as they pass through a data flow. For example, use the number of rows processed to determine whether or not to perform cleanup operations, or update text in an e-mail message to communicate processing status."
+              name="CNT Filas leidas">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable to hold the row count."
+                  name="VariableName">User::FilasLeidas</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\DFT Excel a staging del cursor\CNT Filas leidas.Inputs[Row Count Input 1]"
+                  hasSideEffects="true"
+                  name="Row Count Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\CNT Filas leidas.Outputs[Row Count Output 1]"
+                  name="Row Count Output 1"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\CNT Filas leidas.Inputs[Row Count Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100"
+              componentClassID="Microsoft.ConditionalSplit"
+              contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
+              name="CSPL SourceRowId 1 a 100"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input]"
+                  description="Input to the Conditional Split Transformation"
+                  name="Conditional Split Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input].Columns[SourceRowId]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceRowId"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Registros 1 a 100]"
+                  description="Output 1 of the Conditional Split Transformation"
+                  errorOrTruncationOperation="Computation"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Registros 1 a 100"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                      name="Expression">(DT_I4)[TRIM](#{Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]}) &gt;= 1 &amp;&amp; (DT_I4)[TRIM](#{Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]}) &lt;= 100</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the friendly version of the expression. This expression version uses column names."
+                      expressionType="Notify"
+                      name="FriendlyExpression">(DT_I4)TRIM(SourceRowId) &gt;= 1 &amp;&amp; (DT_I4)TRIM(SourceRowId) &lt;= 100</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Fuera de rango]"
+                  description="Default Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  name="Fuera de rango"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input]">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      name="IsDefaultOut">true</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Conditional Split Error Output]"
+                  description="Error Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Conditional Split Error Output"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT Excel a staging del cursor\EXC Personas"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="EXC Personas"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">Personas$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT Excel a staging del cursor\EXC Personas.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Excel_PersonasETL]"
+                  connectionManagerRefId="Package.ConnectionManagers[Excel_PersonasETL]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SourceRowId]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]"
+                      name="SourceRowId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DocumentType]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentType]"
+                      name="DocumentType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DocumentNumber]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentNumber]"
+                      name="DocumentNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[FirstName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[FirstName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[FirstName]"
+                      name="FirstName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MiddleName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MiddleName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MiddleName]"
+                      name="MiddleName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[LastName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[LastName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[LastName]"
+                      name="LastName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SecondLastName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SecondLastName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SecondLastName]"
+                      name="SecondLastName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[BirthDate]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[BirthDate]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[BirthDate]"
+                      name="BirthDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ReportedAge]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[ReportedAge]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ReportedAge]"
+                      name="ReportedAge"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Sex]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Sex]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Sex]"
+                      name="Sex"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MaritalStatus]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MaritalStatus]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MaritalStatus]"
+                      name="MaritalStatus"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Email]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Email]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Email]"
+                      name="Email"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Phone]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Phone]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Phone]"
+                      name="Phone"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DepartmentCode]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentCode]"
+                      name="DepartmentCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DepartmentName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentName]"
+                      name="DepartmentName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MunicipalityCode]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityCode]"
+                      name="MunicipalityCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MunicipalityName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityName]"
+                      name="MunicipalityName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Zone]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Zone]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Zone]"
+                      name="Zone"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Address]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Address]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Address]"
+                      name="Address"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HousingType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HousingType]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HousingType]"
+                      name="HousingType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SocioeconomicStratum]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SocioeconomicStratum]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SocioeconomicStratum]"
+                      name="SocioeconomicStratum"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EducationLevel]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EducationLevel]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EducationLevel]"
+                      name="EducationLevel"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStatus]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmploymentStatus]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStatus]"
+                      name="EmploymentStatus"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationCode]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[OccupationCode]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationCode]"
+                      name="OccupationCode"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[OccupationName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationName]"
+                      name="OccupationName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmployerName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmployerName]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmployerName]"
+                      name="EmployerName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ContractType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[ContractType]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ContractType]"
+                      name="ContractType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStartDate]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmploymentStartDate]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStartDate]"
+                      name="EmploymentStartDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyIncome]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MonthlyIncome]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyIncome]"
+                      name="MonthlyIncome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyExpenses]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MonthlyExpenses]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyExpenses]"
+                      name="MonthlyExpenses"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Dependents]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Dependents]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Dependents]"
+                      name="Dependents"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HouseholdSize]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HouseholdSize]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HouseholdSize]"
+                      name="HouseholdSize"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HealthRegime]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HealthRegime]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HealthRegime]"
+                      name="HealthRegime"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Disability]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Disability]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Disability]"
+                      name="Disability"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SurveyDate]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SurveyDate]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SurveyDate]"
+                      name="SurveyDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[UpdatedAt]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[UpdatedAt]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[UpdatedAt]"
+                      name="UpdatedAt"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceChannel]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SourceChannel]"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceChannel]"
+                      name="SourceChannel"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SourceRowId]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceRowId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DocumentType]"
+                      dataType="wstr"
+                      length="255"
+                      name="DocumentType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DocumentNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="DocumentNumber" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[FirstName]"
+                      dataType="wstr"
+                      length="255"
+                      name="FirstName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MiddleName]"
+                      dataType="wstr"
+                      length="255"
+                      name="MiddleName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[LastName]"
+                      dataType="wstr"
+                      length="255"
+                      name="LastName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SecondLastName]"
+                      dataType="wstr"
+                      length="255"
+                      name="SecondLastName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[BirthDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="BirthDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[ReportedAge]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportedAge" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Sex]"
+                      dataType="wstr"
+                      length="255"
+                      name="Sex" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MaritalStatus]"
+                      dataType="wstr"
+                      length="255"
+                      name="MaritalStatus" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Email]"
+                      dataType="wstr"
+                      length="255"
+                      name="Email" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Phone]"
+                      dataType="wstr"
+                      length="255"
+                      name="Phone" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DepartmentCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="DepartmentCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[DepartmentName]"
+                      dataType="wstr"
+                      length="255"
+                      name="DepartmentName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MunicipalityCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="MunicipalityCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MunicipalityName]"
+                      dataType="wstr"
+                      length="255"
+                      name="MunicipalityName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Zone]"
+                      dataType="wstr"
+                      length="255"
+                      name="Zone" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Address]"
+                      dataType="wstr"
+                      length="255"
+                      name="Address" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HousingType]"
+                      dataType="wstr"
+                      length="255"
+                      name="HousingType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SocioeconomicStratum]"
+                      dataType="wstr"
+                      length="255"
+                      name="SocioeconomicStratum" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EducationLevel]"
+                      dataType="wstr"
+                      length="255"
+                      name="EducationLevel" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmploymentStatus]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmploymentStatus" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[OccupationCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="OccupationCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[OccupationName]"
+                      dataType="wstr"
+                      length="255"
+                      name="OccupationName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmployerName]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmployerName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[ContractType]"
+                      dataType="wstr"
+                      length="255"
+                      name="ContractType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[EmploymentStartDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmploymentStartDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MonthlyIncome]"
+                      dataType="wstr"
+                      length="255"
+                      name="MonthlyIncome" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[MonthlyExpenses]"
+                      dataType="wstr"
+                      length="255"
+                      name="MonthlyExpenses" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Dependents]"
+                      dataType="wstr"
+                      length="255"
+                      name="Dependents" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HouseholdSize]"
+                      dataType="wstr"
+                      length="255"
+                      name="HouseholdSize" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[HealthRegime]"
+                      dataType="wstr"
+                      length="255"
+                      name="HealthRegime" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[Disability]"
+                      dataType="wstr"
+                      length="255"
+                      name="Disability" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SurveyDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="SurveyDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[UpdatedAt]"
+                      dataType="wstr"
+                      length="255"
+                      name="UpdatedAt" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].ExternalColumns[SourceChannel]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceChannel" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SourceRowId]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SourceRowId]"
+                      name="SourceRowId" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DocumentType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DocumentType]"
+                      name="DocumentType" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DocumentNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DocumentNumber]"
+                      name="DocumentNumber" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[FirstName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[FirstName]"
+                      name="FirstName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MiddleName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MiddleName]"
+                      name="MiddleName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[LastName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[LastName]"
+                      name="LastName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SecondLastName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SecondLastName]"
+                      name="SecondLastName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[BirthDate]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[BirthDate]"
+                      name="BirthDate" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ReportedAge]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ReportedAge]"
+                      name="ReportedAge" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Sex]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Sex]"
+                      name="Sex" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MaritalStatus]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MaritalStatus]"
+                      name="MaritalStatus" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Email]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Email]"
+                      name="Email" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Phone]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Phone]"
+                      name="Phone" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DepartmentCode]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DepartmentCode]"
+                      name="DepartmentCode" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DepartmentName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[DepartmentName]"
+                      name="DepartmentName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MunicipalityCode]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MunicipalityCode]"
+                      name="MunicipalityCode" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MunicipalityName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MunicipalityName]"
+                      name="MunicipalityName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Zone]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Zone]"
+                      name="Zone" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Address]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Address]"
+                      name="Address" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HousingType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HousingType]"
+                      name="HousingType" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SocioeconomicStratum]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SocioeconomicStratum]"
+                      name="SocioeconomicStratum" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EducationLevel]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EducationLevel]"
+                      name="EducationLevel" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmploymentStatus]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmploymentStatus]"
+                      name="EmploymentStatus" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[OccupationCode]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[OccupationCode]"
+                      name="OccupationCode" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[OccupationName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[OccupationName]"
+                      name="OccupationName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmployerName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmployerName]"
+                      name="EmployerName" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ContractType]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ContractType]"
+                      name="ContractType" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmploymentStartDate]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[EmploymentStartDate]"
+                      name="EmploymentStartDate" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MonthlyIncome]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MonthlyIncome]"
+                      name="MonthlyIncome" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MonthlyExpenses]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[MonthlyExpenses]"
+                      name="MonthlyExpenses" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Dependents]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Dependents]"
+                      name="Dependents" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HouseholdSize]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HouseholdSize]"
+                      name="HouseholdSize" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HealthRegime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[HealthRegime]"
+                      name="HealthRegime" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Disability]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[Disability]"
+                      name="Disability" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SurveyDate]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SurveyDate]"
+                      name="SurveyDate" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[UpdatedAt]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[UpdatedAt]"
+                      name="UpdatedAt" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SourceChannel]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[SourceChannel]"
+                      name="SourceChannel" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE_DST stg CursorPersonas"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[stg].[CursorPersonas]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[OLEDB_PersonasETL]"
+                  connectionManagerRefId="Package.ConnectionManagers[OLEDB_PersonasETL]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[SourceRowId]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceRowId"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SourceRowId]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceRowId]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[DocumentType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DocumentType"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DocumentType]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentType]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[DocumentNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DocumentNumber"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DocumentNumber]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DocumentNumber]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[FirstName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="FirstName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[FirstName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[FirstName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MiddleName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MiddleName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MiddleName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MiddleName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[LastName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="LastName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[LastName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[LastName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[SecondLastName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SecondLastName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SecondLastName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SecondLastName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[BirthDate]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="BirthDate"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[BirthDate]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[BirthDate]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[ReportedAge]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ReportedAge"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[ReportedAge]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ReportedAge]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Sex]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Sex"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Sex]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Sex]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MaritalStatus]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MaritalStatus"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MaritalStatus]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MaritalStatus]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Email]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Email"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Email]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Email]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Phone]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Phone"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Phone]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Phone]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[DepartmentCode]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DepartmentCode"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DepartmentCode]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentCode]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[DepartmentName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DepartmentName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DepartmentName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[DepartmentName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MunicipalityCode]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MunicipalityCode"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MunicipalityCode]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityCode]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MunicipalityName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MunicipalityName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MunicipalityName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MunicipalityName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Zone]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Zone"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Zone]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Zone]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Address]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Address"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Address]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Address]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[HousingType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="HousingType"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HousingType]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HousingType]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[SocioeconomicStratum]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SocioeconomicStratum"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SocioeconomicStratum]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SocioeconomicStratum]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[EducationLevel]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="EducationLevel"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EducationLevel]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EducationLevel]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[EmploymentStatus]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="EmploymentStatus"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmploymentStatus]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStatus]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[OccupationCode]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OccupationCode"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[OccupationCode]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationCode]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[OccupationName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="OccupationName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[OccupationName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[OccupationName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[EmployerName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="EmployerName"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmployerName]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmployerName]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[ContractType]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ContractType"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[ContractType]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[ContractType]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[EmploymentStartDate]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="EmploymentStartDate"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmploymentStartDate]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[EmploymentStartDate]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MonthlyIncome]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MonthlyIncome"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MonthlyIncome]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyIncome]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[MonthlyExpenses]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="MonthlyExpenses"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MonthlyExpenses]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[MonthlyExpenses]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Dependents]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Dependents"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Dependents]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Dependents]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[HouseholdSize]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="HouseholdSize"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HouseholdSize]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HouseholdSize]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[HealthRegime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="HealthRegime"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HealthRegime]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[HealthRegime]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[Disability]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Disability"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Disability]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[Disability]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[SurveyDate]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SurveyDate"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SurveyDate]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SurveyDate]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[UpdatedAt]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="UpdatedAt"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[UpdatedAt]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[UpdatedAt]" />
+                    <inputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].Columns[SourceChannel]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SourceChannel"
+                      externalMetadataColumnId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SourceChannel]"
+                      lineageId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output].Columns[SourceChannel]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SourceRowId]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceRowId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DocumentType]"
+                      dataType="wstr"
+                      length="255"
+                      name="DocumentType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DocumentNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="DocumentNumber" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[FirstName]"
+                      dataType="wstr"
+                      length="255"
+                      name="FirstName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MiddleName]"
+                      dataType="wstr"
+                      length="255"
+                      name="MiddleName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[LastName]"
+                      dataType="wstr"
+                      length="255"
+                      name="LastName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SecondLastName]"
+                      dataType="wstr"
+                      length="255"
+                      name="SecondLastName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[BirthDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="BirthDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[ReportedAge]"
+                      dataType="wstr"
+                      length="255"
+                      name="ReportedAge" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Sex]"
+                      dataType="wstr"
+                      length="255"
+                      name="Sex" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MaritalStatus]"
+                      dataType="wstr"
+                      length="255"
+                      name="MaritalStatus" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Email]"
+                      dataType="wstr"
+                      length="255"
+                      name="Email" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Phone]"
+                      dataType="wstr"
+                      length="255"
+                      name="Phone" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DepartmentCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="DepartmentCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[DepartmentName]"
+                      dataType="wstr"
+                      length="255"
+                      name="DepartmentName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MunicipalityCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="MunicipalityCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MunicipalityName]"
+                      dataType="wstr"
+                      length="255"
+                      name="MunicipalityName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Zone]"
+                      dataType="wstr"
+                      length="255"
+                      name="Zone" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Address]"
+                      dataType="wstr"
+                      length="255"
+                      name="Address" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HousingType]"
+                      dataType="wstr"
+                      length="255"
+                      name="HousingType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SocioeconomicStratum]"
+                      dataType="wstr"
+                      length="255"
+                      name="SocioeconomicStratum" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EducationLevel]"
+                      dataType="wstr"
+                      length="255"
+                      name="EducationLevel" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmploymentStatus]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmploymentStatus" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[OccupationCode]"
+                      dataType="wstr"
+                      length="255"
+                      name="OccupationCode" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[OccupationName]"
+                      dataType="wstr"
+                      length="255"
+                      name="OccupationName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmployerName]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmployerName" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[ContractType]"
+                      dataType="wstr"
+                      length="255"
+                      name="ContractType" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[EmploymentStartDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="EmploymentStartDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MonthlyIncome]"
+                      dataType="wstr"
+                      length="255"
+                      name="MonthlyIncome" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[MonthlyExpenses]"
+                      dataType="wstr"
+                      length="255"
+                      name="MonthlyExpenses" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Dependents]"
+                      dataType="wstr"
+                      length="255"
+                      name="Dependents" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HouseholdSize]"
+                      dataType="wstr"
+                      length="255"
+                      name="HouseholdSize" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[HealthRegime]"
+                      dataType="wstr"
+                      length="255"
+                      name="HealthRegime" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[Disability]"
+                      dataType="wstr"
+                      length="255"
+                      name="Disability" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SurveyDate]"
+                      dataType="wstr"
+                      length="255"
+                      name="SurveyDate" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[UpdatedAt]"
+                      dataType="wstr"
+                      length="255"
+                      name="UpdatedAt" />
+                    <externalMetadataColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input].ExternalColumns[SourceChannel]"
+                      dataType="wstr"
+                      length="255"
+                      name="SourceChannel" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\DFT Excel a staging del cursor.Paths[Excel Source Output]"
+              endId="Package\DFT Excel a staging del cursor\CNT Filas leidas.Inputs[Row Count Input 1]"
+              name="Excel Source Output"
+              startId="Package\DFT Excel a staging del cursor\EXC Personas.Outputs[Excel Source Output]" />
+            <path
+              refId="Package\DFT Excel a staging del cursor.Paths[Registros 1 a 100]"
+              endId="Package\DFT Excel a staging del cursor\CNT Filas al staging.Inputs[Row Count Input 1]"
+              name="Registros 1 a 100"
+              startId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Outputs[Registros 1 a 100]" />
+            <path
+              refId="Package\DFT Excel a staging del cursor.Paths[Row Count Output 1]"
+              endId="Package\DFT Excel a staging del cursor\OLE_DST stg CursorPersonas.Inputs[OLE DB Destination Input]"
+              name="Row Count Output 1"
+              startId="Package\DFT Excel a staging del cursor\CNT Filas al staging.Outputs[Row Count Output 1]" />
+            <path
+              refId="Package\DFT Excel a staging del cursor.Paths[Row Count Output 11]"
+              endId="Package\DFT Excel a staging del cursor\CSPL SourceRowId 1 a 100.Inputs[Conditional Split Input]"
+              name="Row Count Output 1"
+              startId="Package\DFT Excel a staging del cursor\CNT Filas leidas.Outputs[Row Count Output 1]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL Vaciar staging del cursor"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{C7AC22AA-0E71-49BD-8DE2-1483F3BF017A}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL Vaciar staging del cursor"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{10A59905-A248-4EBE-B61D-B8A2A8D9A361}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE stg.CursorPersonas;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{8AB42A6F-F909-44D8-8BFF-6977096AA5A8\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{189C4402-F811-46B2-8AED-088A0DF08D38}"
+      DTS:From="Package\SQL Vaciar staging del cursor"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{189C4402-F811-46B2-8AED-088A0DF08D38}"
+      DTS:To="Package\DFT Excel a staging del cursor" />
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>

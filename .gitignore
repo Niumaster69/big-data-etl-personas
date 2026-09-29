@@ -1,0 +1,11 @@
+# Visual Studio / SSIS
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.dtproj.user
+
+# Respaldos y archivos de trabajo
+*.bak
+~$*
